@@ -23,7 +23,8 @@ app.add_middleware(
 vectorizer = joblib.load("api/tfidf_vectorizer.pkl", 'r')
 multilabel_binarizer = joblib.load("api/multilabel_binarizer.pkl", 'r')
 model = joblib.load("api/logit_model.pkl", 'r')
-
+nlp = spacy.load("en_core_web_sm")
+#nlp = spacy.load('en_core_web_md', exclude=['tok2vec', 'ner', 'parser', 'attribute_ruler', 'lemmatizer'])
 
 # Define the default route
 @app.get("/")
@@ -35,8 +36,6 @@ def root():
 def predict(question):
 
     # Clean the question
-    nlp = spacy.load("en_core_web_sm")
-    #nlp = spacy.load('en_core_web_md', exclude=['tok2vec', 'ner', 'parser', 'attribute_ruler', 'lemmatizer'])
     pos_list = ["NOUN","PROPN"]
     rawdoc = question
     cleaned_question = preproc.text_cleaner(rawdoc, nlp, pos_list, "english")
